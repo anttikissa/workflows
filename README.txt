@@ -14,7 +14,7 @@ Returns {
     id: 123
 }
 
-List them:
+List workflows:
 GET /workflows
 
 Returns [
@@ -26,7 +26,7 @@ Returns [
     ...
 ]
 
-Access one:
+Access a workflow:
 GET /workflows/:id
 
 Returns {
@@ -35,7 +35,7 @@ Returns {
     steps: [ ... ]
 }
 
-Edit workflow:
+Edit a workflow:
 PATCH /workflows/:id {
     name: 'new-name',
     steps: [
@@ -43,7 +43,7 @@ PATCH /workflows/:id {
     ]
 }
 
-Delete workflow:
+Delete a workflow:
 DELETE /workflows/:id
 
 
@@ -65,10 +65,28 @@ GET /executions/:id
 
 Returns {
     id: 234,
-    status: 'finished', // TODO figure out statuses as we go
+    workflowId: 123,
+    status: 'done', // TODO figure out statuses as we go
     // and other state that executions could have:
     // variables? error states? result?
 }
+
+If we need a list of executions, maybe:
+
+GET /executions
+
+Returns [
+    {
+        id: 234,
+        workflowId: 123,
+        status: 'pending'
+    },
+    {
+        id: 235,
+        workflowId: 123,
+        status: 'done'
+    }
+]
 
 Cancel an execution (set status to 'cancelled'; maybe not that important
 for PoC):
