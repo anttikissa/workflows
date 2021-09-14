@@ -62,10 +62,10 @@ app.patch('/workflows/:id', (req, res) => {
 		error('workflow not found')
 	}
 
-	let data = req.body
-	Object.assign(workflow, data)
+	// TODO maybe should validate
+	Object.assign(workflow, req.body)
 
-	res.send('ok')
+	res.send(workflow)
 })
 
 app.listen(port, () => {
