@@ -91,3 +91,10 @@ Returns [
 Cancel an execution (set status to 'cancelled'; maybe not that important
 for PoC):
 POST /executions/:id/cancel
+
+
+# Command line tool
+
+./workflow-deploy workflow_name --source=workflow
+
+./workflow-run workflow_name
