@@ -16,7 +16,35 @@ app.get('/', (req, res) => {
 let workflows = []
 let workflowsNextId = 1
 
+let Workflow = {
+	create: ({ name, steps }) => {
+		let id = workflowsNextId++
+		workflows.push({
+			id,
+			name,
+			steps
+		})
+		return id
+	},
+
+	findById: (id) => {
+		return workflows.find(w => w.id === id)
+	},
+
+	findByName: (name) => {
+		// Find the most recent workflow with the given name
+		return [...workflows].reverse().find(w => w.name === name)
+	}
+}
+
+//
+// Workflows
+//
+
 app.post('/workflows', (req, res) => {
+	// This probably works differently than Google Cloud in that you can
+	// create multiple workflows with the same name. This allows us to keep
+	// the API and deploy script as simple as possible for now.
 	log('POST /workflows', req.body)
 	let workflow = req.body
 
@@ -29,9 +57,7 @@ app.post('/workflows', (req, res) => {
 		error('workflow steps missing')
 	}
 
-	let id = workflowsNextId++
-	workflows.push({
-		id,
+	let id = Workflow.create({
 		name: workflow.name,
 		steps: workflow.steps
 	})
@@ -49,7 +75,7 @@ app.get('/workflows/:id', (req, res) => {
 	let id = Number(req.params.id)
 	log(`GET /workflows/${id}`)
 
-	let workflow = workflows.find(w => w.id === id)
+	let workflow = Workflow.findById(id)
 	res.send(workflow || error('workflow not found'))
 })
 
@@ -57,7 +83,7 @@ app.patch('/workflows/:id', (req, res) => {
 	let id = Number(req.params.id)
 	log(`PATCH /workflows/${id}`)
 
-	let workflow = workflows.find(w => w.id === id)
+	let workflow = Workflow.findById(id)
 	if (!workflow) {
 		error('workflow not found')
 	}
