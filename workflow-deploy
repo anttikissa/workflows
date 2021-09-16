@@ -1,0 +1,61 @@
+#!/usr/bin/env node
+
+let log = console.log
+let fs = require('fs')
+let arg = require('arg')
+let got = require('got')
+let yaml = require('js-yaml')
+
+function error(message) {
+	log(`Error: ${message}`)
+	process.exit(1)
+}
+
+let args = arg({
+	'--help': Boolean,
+	'--source': String
+})
+
+if (args['--help']) {
+	log('Usage: workflow-deploy workflow_name --source=workflow_file')
+	process.exit(0)
+}
+
+if (args._.length !== 1) {
+	error('I need exactly one argument (name of the workflow to be deployed)')
+}
+
+if (!args['--source']) {
+	error('Argument --source=workflow_file is required')
+}
+
+let workflowName = args._[0]
+let sourceFilename = args['--source']
+
+log('deploy', workflowName, 'source', sourceFilename)
+
+let host = 'localhost'
+let port = 3000
+
+let url = `http://${host}:${port}/workflows`
+
+let workflowFileRaw = fs.readFileSync(sourceFilename, 'utf8')
+let workflowSteps
+if (sourceFilename.endsWith('yaml')) {
+	workflowSteps = yaml.load(workflowFileRaw)
+} else if (sourceFilename.endsWith('json')) {
+	workflowSteps = JSON.parse(workflowFileRaw)
+} else {
+	error('Unknown workflow file extension (.yaml or .json please)')
+}
+
+async function main() {
+	await got.post(url, {
+		json: {
+			name: workflowName,
+			steps: workflowSteps
+		}
+	})
+}
+
+main().then(log, log)
