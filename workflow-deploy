@@ -58,4 +58,4 @@ async function main() {
 	})
 }
 
-main().then(log, log)
+main().then(() => {}, log)
