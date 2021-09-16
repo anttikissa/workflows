@@ -1,0 +1,29 @@
+[
+    {
+        "getCurrentTime": {
+            "args": {
+                "url": "https://us-central1-workflowsample.cloudfunctions.net/datetime"
+            },
+            "call": "http.get",
+            "result": "currentTime"
+        }
+    },
+    {
+        "readWikipedia": {
+            "args": {
+                "query": {
+                    "action": "opensearch",
+                    "search": "${currentTime.body.dayOfTheWeek}"
+                },
+                "url": "https://en.wikipedia.org/w/api.php"
+            },
+            "call": "http.get",
+            "result": "wikiResult"
+        }
+    },
+    {
+        "returnResult": {
+            "return": "${wikiResult.body[1]}"
+        }
+    }
+]
