@@ -1,6 +1,7 @@
 let express = require('express')
 let got = require('got')
 let template = require('lodash.template')
+let lodashGet = require('lodash.get')
 let querystring = require('querystring')
 
 let app = express()
@@ -200,18 +201,8 @@ let Execution = {
 					error(`step ${stepName}: step.return must look like \${...}`)
 				}
 
-				// The code reviewer is kindly asked to take a deep breath now
-				// and to think of peaceful things
-				try {
-					with (execution.context) {
-						execution.result = eval(returnMatch[1])
-						execution.status = 'succeeded'
-					}
-				} catch (e) {
-					log(`eval error in step ${stepName}: ${e.message}`, step)
-					execution.status = 'error'
-					execution.message = e.message
-				}
+				execution.result = lodashGet(execution.context, returnMatch[1])
+				execution.status = 'succeeded'
 
 				return execution
 			} else {
