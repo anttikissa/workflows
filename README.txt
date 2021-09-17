@@ -51,7 +51,7 @@ DELETE /workflows/:id
 
 Execute a workflow:
 POST /executions {
-    workflowId: 123,
+    workflowName: 'my-workflow',
     // args: { ... }
     // maybe if I learn how args are supposed to work
 }
@@ -98,3 +98,11 @@ POST /executions/:id/cancel
 ./workflow-deploy workflow_name --source=workflow
 
 ./workflow-run workflow_name
+
+
+# What's missing
+
+- Endpoints return errors in HTML, not JSON
+- Error handling and validation could be more robust (more well-defined
+  separation between expected and unexpected errors)
+- Things are evaluated not so securely

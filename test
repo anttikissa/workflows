@@ -1,0 +1,4 @@
+#!/bin/bash
+
+./workflow-deploy test-workflow --source=test-workflow.yaml
+http post http://localhost:3000/executions name=test-workflow
