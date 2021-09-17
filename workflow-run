@@ -1,0 +1,46 @@
+#!/usr/bin/env node
+
+let log = console.log
+let arg = require('arg')
+let got = require('got')
+
+function error(message) {
+	log(`Error: ${message}`)
+	process.exit(1)
+}
+
+let args = arg({
+	'--help': Boolean,
+})
+
+if (args['--help']) {
+	log('Usage: workflow-run workflow_name')
+	process.exit(0)
+}
+
+if (args._.length !== 1) {
+	error('I need exactly one argument (name of the workflow to run)')
+}
+
+let workflowName = args._[0]
+
+log('run', workflowName)
+
+let host = 'localhost'
+let port = 3000
+
+let url = `http://${host}:${port}/executions`
+
+async function main() {
+	let rawResult = await got.post(url, {
+		json: {
+			name: workflowName
+		}
+	})
+
+	let result = JSON.parse(rawResult.body)
+
+	log('result:', JSON.stringify(result, null, 2))
+}
+
+main().then(() => {}, log)
