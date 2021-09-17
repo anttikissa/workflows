@@ -55,10 +55,6 @@ PATCH /workflows/:id {
     ]
 }
 
-Delete a workflow:
-DELETE /workflows/:id
-
-
 ## Executions:
 
 Execute a workflow:
