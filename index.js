@@ -1,6 +1,7 @@
 let express = require('express')
 
 let Execution = require('./model/Execution')
+let Workflow = require('./model/Workflow')
 
 let { error } = require('./util')
 
@@ -13,34 +14,6 @@ app.use(express.json())
 app.get('/', (req, res) => {
 	res.send('hello')
 })
-
-let workflows = []
-let workflowsNextId = 1
-
-let Workflow = {
-	create: ({ name, steps }) => {
-		let id = workflowsNextId++
-		workflows.push({
-			id,
-			name,
-			steps
-		})
-		return id
-	},
-
-	findById: (id) => {
-		return workflows.find(w => w.id === id)
-	},
-
-	findByName: (name) => {
-		// Find the most recent workflow with the given name
-		return [...workflows].reverse().find(w => w.name === name)
-	}
-}
-
-//
-// Workflows
-//
 
 app.post('/workflows', (req, res) => {
 	// This probably works differently than Google Cloud in that you can
@@ -77,6 +50,7 @@ app.get('/workflows/:id', (req, res) => {
 app.get('/workflows', (req, res) => {
 	log('GET /workflows')
 
+	let workflows = Workflow.getAll()
 	res.send(workflows)
 })
 
@@ -84,13 +58,7 @@ app.patch('/workflows/:id', (req, res) => {
 	let id = Number(req.params.id)
 	log(`PATCH /workflows/${id}`)
 
-	let workflow = Workflow.findById(id)
-	if (!workflow) {
-		error('workflow not found')
-	}
-
-	// TODO maybe should validate
-	Object.assign(workflow, req.body)
+	let workflow = Workflow.modify(id, req.body)
 
 	res.send(workflow)
 })
