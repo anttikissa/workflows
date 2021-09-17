@@ -1,3 +1,15 @@
+# How to run
+
+    # run server at localhost:3000; recent node.js required
+    npm install
+    ./start
+
+    # similar to gcloud workflows deploy
+    ./workflow-deploy test --source=test.yaml
+
+    # similar to gcloud workflows run
+    ./workflow-run test
+
 # API
 
 ## Workflows:
