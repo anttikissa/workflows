@@ -6,5 +6,6 @@ function error(message, more) {
 }
 
 module.exports = {
-	error
+	error,
+	log: console.log
 }
