@@ -5,6 +5,7 @@
     result: currentTime
 - changeIt:
     assign:
+      # this works best when the day is Friday :)
       - search: ${currentTime.body.dayOfTheWeek}
       - search: ${search+" "+"night"}
       - search: ${search+" "+"lights"}

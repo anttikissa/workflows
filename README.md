@@ -4,11 +4,18 @@
     npm install
     ./start
 
-    # similar to gcloud workflows deploy
+    # similar to 'gcloud workflows deploy'
     ./workflow-deploy test --source=test.yaml
 
-    # similar to gcloud workflows run
+    # similar to 'gcloud workflows run'
     ./workflow-run test
+
+# Scope & supported features
+
+- Workflow yaml/json structure similar to Google Cloud Workflows
+- http.get
+- assign
+- return
 
 # API
 
@@ -107,21 +114,12 @@ Returns [
     }
 ]
 
-Cancel an execution (set status to 'cancelled'; maybe not that important
-for PoC):
-POST /executions/:id/cancel
-
-
-# Command line tool
-
-./workflow-deploy workflow_name --source=workflow
-
-./workflow-run workflow_name
-
-
-# What's missing
+# What's missing?
 
 - Endpoints return errors in HTML, not JSON
 - Error handling and validation could be more robust (more well-defined
   separation between expected and unexpected errors)
 - Things are evaluated not so securely
+- Most of gcloud workflows functionality (just http.get, assign and return 
+  for now)
+- Web UI (command line will have to do for now)

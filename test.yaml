@@ -1,8 +1,7 @@
 - getCurrentTime:
     call: http.get
     args:
-#      url: https://us-central1-workflowsample.cloudfunctions.net/datetime
-      url: http://localhost:3000/datetime
+      url: https://us-central1-workflowsample.cloudfunctions.net/datetime
     result: currentTime
 - readWikipedia:
     call: http.get
