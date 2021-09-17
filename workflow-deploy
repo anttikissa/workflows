@@ -50,14 +50,16 @@ if (sourceFilename.endsWith('yaml')) {
 }
 
 async function main() {
-	let result = await got.post(url, {
+	let rawResult = await got.post(url, {
 		json: {
 			name: workflowName,
 			steps: workflowSteps
 		}
 	})
 
-	log('result:', result.body)
+	let result = JSON.parse(rawResult.body)
+
+	log('result:', result)
 }
 
 main().then(() => {}, log)
