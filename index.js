@@ -179,7 +179,6 @@ let Execution = {
 					execution.context[step.result] = {
 						body: httpResult.body
 					}
-
 				} catch (e) {
 					execution.status = 'error'
 					execution.message = e.message
@@ -205,6 +204,18 @@ let Execution = {
 				execution.status = 'succeeded'
 
 				return execution
+			} else if (step.assign) {
+				for (let assignStep of step.assign) {
+					let assignStepKeys = Object.keys(assignStep)
+					if (assignStepKeys.length !== 1) {
+						error('assign step must have exactly 1 key', step)
+					}
+					let assignStepKey = assignStepKeys[0]
+
+					let value = evaluate(assignStep[assignStepKey],
+						execution.context)
+					execution.context[assignStepKey] = value
+				}
 			} else {
 				error('unknown step type', step)
 			}
