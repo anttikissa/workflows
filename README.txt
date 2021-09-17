@@ -14,6 +14,15 @@ Returns {
     id: 123
 }
 
+Access a workflow:
+GET /workflows/:id
+
+Returns {
+    id: 123,
+    name: 'my-workflow',
+	steps: [ ... ]
+}
+
 List workflows:
 GET /workflows
 
@@ -25,15 +34,6 @@ Returns [
     },
     ...
 ]
-
-Access a workflow:
-GET /workflows/:id
-
-Returns {
-    id: 123,
-    name: 'my-workflow',
-    steps: [ ... ]
-}
 
 Edit a workflow:
 PATCH /workflows/:id {
@@ -65,26 +65,37 @@ GET /executions/:id
 
 Returns {
     id: 234,
-    workflowId: 123,
-    status: 'done', // TODO figure out statuses as we go
-    // and other state that executions could have:
-    // variables? error states? result?
+    workflow: {
+    	// ..
+    },
+    status: 'running', // or 'succeeded' or 'error'
+    result: ['result'] // if succeeded
+    message: 'reason' // if error
+    step: 1, // current step index
+    context: // execution variables go here
 }
 
-If we need a list of executions, maybe:
-
+List executions:
 GET /executions
 
 Returns [
     {
         id: 234,
-        workflowId: 123,
-        status: 'pending'
+        workflow: {
+        	// ...
+        },
+        status: 'succeeded',
+        result: 'something',
+        // ...
     },
     {
         id: 235,
-        workflowId: 123,
-        status: 'done'
+        workflow: {
+        	// ...
+        },
+        status: 'error',
+        message: 'Something failed'
+        // ...
     }
 ]
 

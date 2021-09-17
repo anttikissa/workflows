@@ -73,18 +73,18 @@ app.post('/workflows', (req, res) => {
 	res.send({ id })
 })
 
-app.get('/workflows', (req, res) => {
-	log('GET /workflows')
-
-	res.send(workflows)
-})
-
 app.get('/workflows/:id', (req, res) => {
 	let id = Number(req.params.id)
 	log(`GET /workflows/${id}`)
 
 	let workflow = Workflow.findById(id)
 	res.send(workflow || error('workflow not found'))
+})
+
+app.get('/workflows', (req, res) => {
+	log('GET /workflows')
+
+	res.send(workflows)
 })
 
 app.patch('/workflows/:id', (req, res) => {
@@ -131,6 +131,10 @@ let Execution = {
 		executions.push(execution)
 
 		return Execution.run(execution)
+	},
+
+	findById: (id) => {
+		return executions.find(w => w.id === id)
 	},
 
 	run: async (execution) => {
@@ -247,6 +251,20 @@ app.post('/executions', async (req, res, next) => {
 	} catch (e) {
 		return next(e)
 	}
+})
+
+app.get('/executions/:id', (req, res) => {
+	let id = Number(req.params.id)
+	log(`GET /executions/${id}`)
+
+	let execution = Execution.findById(id)
+	res.send(execution || error('workflow not found'))
+})
+
+app.get('/executions', (req, res) => {
+	log('GET /executions')
+
+	res.send(executions)
 })
 
 // Simulate the endpoint used by gcloud example (which doesn't work right
